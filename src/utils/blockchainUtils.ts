@@ -1,5 +1,5 @@
 import { formatUnits, parseUnits, maxUint256, decodeEventLog, Log, TransactionReceipt, UserRejectedRequestError } from 'viem';
-import { useReadContract, useWriteContract, useBalance, useWaitForTransactionReceipt, usePublicClient, useAccount, useContractRead } from 'wagmi';
+import { useReadContract, useWriteContract, useBalance, useWaitForTransactionReceipt, usePublicClient, useAccount } from 'wagmi';
 import BondingCurveManagerArtifact from '@/abi/BondingCurveManager.json';
 import ERC20Artifact from '@/abi/ERC20.json';
 import { useCallback, useMemo } from 'react';

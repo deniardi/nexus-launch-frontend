@@ -35,10 +35,28 @@
       "status": "failed",
       "completed_at": "2026-02-07T23:08:53.694Z",
       "duration_ms": 43409
+    },
+    {
+      "agent_id": "ac25c59",
+      "agent_type": "oh-my-claudecode:explore-high",
+      "started_at": "2026-02-07T23:11:15.354Z",
+      "parent_mode": "none",
+      "status": "failed",
+      "completed_at": "2026-02-07T23:12:13.117Z",
+      "duration_ms": 57763
+    },
+    {
+      "agent_id": "a5e4f30",
+      "agent_type": "oh-my-claudecode:code-reviewer",
+      "started_at": "2026-02-07T23:13:32.816Z",
+      "parent_mode": "none",
+      "status": "failed",
+      "completed_at": "2026-02-07T23:14:56.331Z",
+      "duration_ms": 83515
     }
   ],
-  "total_spawned": 4,
+  "total_spawned": 6,
   "total_completed": 0,
-  "total_failed": 4,
-  "last_updated": "2026-02-07T23:08:53.695Z"
+  "total_failed": 6,
+  "last_updated": "2026-02-07T23:14:56.331Z"
 }

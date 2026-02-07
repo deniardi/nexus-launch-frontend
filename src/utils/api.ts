@@ -124,7 +124,7 @@ export async function getTokenInfoAndTransactions(
 
 
 //historical price
-export async function getHistoricalPriceData(address: string): Promise<Token> {
+export async function getHistoricalPriceData(address: string): Promise<HistoricalPrice[]> {
   const response = await api.get('/api/ports/getHistoricalPriceData', {
     params: { address }
   });
