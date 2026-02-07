@@ -226,7 +226,7 @@ export function useCreateToken() {
       // const estimatedGas = await publicClient.estimateContractGas({
       //   address: process.env.NEXT_PUBLIC_BONDING_CURVE_MANAGER_ADDRESS as `0x${string}`,
       //   abi: BondingCurveManagerABI,
-      //   functionName: 'create',
+      //   functionName: 'createToken',
       //   args: [name, symbol],
       //   value: totalValue,
       //   account: address,
@@ -237,7 +237,7 @@ export function useCreateToken() {
       const hash = await writeContractAsync({
         address: process.env.NEXT_PUBLIC_BONDING_CURVE_MANAGER_ADDRESS as `0x${string}`,
         abi: BondingCurveManagerABI,
-        functionName: 'create',
+        functionName: 'createToken',
         args: [name, symbol],
         value: totalValue,
         // gas: gasLimit
