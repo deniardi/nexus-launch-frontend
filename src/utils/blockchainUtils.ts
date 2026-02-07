@@ -290,11 +290,11 @@ export function useCreateToken() {
           abi: BondingCurveManagerABI,
           data: tokenCreatedLog.data,
           topics: tokenCreatedLog.topics,
-        }) as unknown as { eventName: string; args: { tokenAddress: `0x${string}`; creator: `0x${string}`; name: string; symbol: string } };
+        }) as unknown as { eventName: string; args: { token: `0x${string}`; buyer: `0x${string}`; amount: bigint; cost: bigint } };
 
         if (decodedLog.eventName === 'TokenCreated' && decodedLog.args) {
-          console.log('Token created successfully. Address:', decodedLog.args.tokenAddress);
-          return decodedLog.args.tokenAddress;
+          console.log('Token created successfully. Address:', decodedLog.args.token);
+          return decodedLog.args.token;
         }
       }
 
