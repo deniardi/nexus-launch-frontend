@@ -95,7 +95,14 @@ const OLD_TOKENS_ABI = [{
 
 // Update the type definition to be more specific
 type OldTokenLiquidityResponse = [string, boolean, bigint];
-type NewTokenLiquidityResponse = [string, string, bigint, bigint, boolean, boolean];
+type NewTokenLiquidityResponse = {
+  tokenAddress: string;
+  creator: string;
+  initialSupply: bigint;
+  raisedAmount: bigint;
+  graduated: boolean;
+  liquidityAdded: boolean;
+};
 type TransformedLiquidityData = [string, bigint, bigint, boolean] | undefined;
 
 export const useTokenLiquidity = (tokenAddress: `0x${string}` | null) => {
@@ -105,7 +112,7 @@ export const useTokenLiquidity = (tokenAddress: `0x${string}` | null) => {
 
   const bondingCurveAddress = getBondingCurveAddress(tokenAddress);
 
-  const { data, isError, isLoading, refetch } = useContractRead({
+  const { data, isError, isLoading, refetch } = useReadContract({
     address: bondingCurveAddress,
     abi: isOldContract ? OLD_TOKENS_ABI : BondingCurveManagerABI,
     functionName: 'tokens',
@@ -126,10 +133,10 @@ export const useTokenLiquidity = (tokenAddress: `0x${string}` | null) => {
         return [token, BigInt(0), ethBalance, isListed];
       }
 
-      // New contract format from ABI: [tokenAddress, creator, initialSupply, raisedAmount, graduated, liquidityAdded]
-      const [tokenAddress, creator, initialSupply, raisedAmount, graduated, liquidityAdded] = data as NewTokenLiquidityResponse;
+      // New contract format: struct returned as OBJECT by viem/wagmi v2+
+      const info = data as NewTokenLiquidityResponse;
       // Transform to expected format: [token, tokenBalance(0), ethBalance(raisedAmount), isListed(graduated||liquidityAdded)]
-      return [tokenAddress, BigInt(0), raisedAmount, graduated || liquidityAdded];
+      return [info.tokenAddress, BigInt(0), info.raisedAmount, info.graduated || info.liquidityAdded];
     } catch (error) {
       return undefined;
     }
