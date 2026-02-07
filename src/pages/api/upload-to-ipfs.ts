@@ -277,9 +277,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     
     // Create a UTFile object from the processed file content
     const fileName = file.originalFilename || 'unnamed_file';
-    const fileBlob = new Blob([processedFileContent], { type: file.mimetype || 'application/octet-stream' });
+    // Convert Buffer to Uint8Array for Blob compatibility
+    const fileContentArray = new Uint8Array(processedFileContent);
+    const fileBlob = new Blob([fileContentArray], { type: file.mimetype || 'application/octet-stream' });
     const utFile = new UTFile(
-      [fileBlob], 
+      [fileBlob],
       fileName,
       { type: file.mimetype || 'application/octet-stream' }
     );
