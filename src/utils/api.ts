@@ -2,7 +2,7 @@
 
 import axios from 'axios';
 import { Token, TokenWithLiquidityEvents, PaginatedResponse, LiquidityEvent, TokenWithTransactions, PriceResponse, HistoricalPrice, USDHistoricalPrice, TokenHolder, TransactionResponse } from '@/interface/types';
-import { ethers } from 'ethers';
+import { formatUnits } from 'viem';
 
 // API Base URL from environment variable
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
@@ -151,9 +151,9 @@ export async function getTokenUSDPriceHistory(address: string): Promise<USDHisto
     ]);
 
     return historicalPrices.map((price: HistoricalPrice) => {
-      const tokenPriceInWei = ethers.BigNumber.from(price.tokenPrice);
-      const tokenPriceInETH = ethers.utils.formatEther(tokenPriceInWei);
-      const tokenPriceUSD = parseFloat(tokenPriceInETH) * parseFloat(ethPrice);
+      const tokenPriceInWei = BigInt(price.tokenPrice);
+      const tokenPriceInETH = Number(formatUnits(tokenPriceInWei, 18));
+      const tokenPriceUSD = tokenPriceInETH * parseFloat(ethPrice);
 
       return {
         tokenPriceUSD: tokenPriceUSD.toFixed(9),  // Adjust decimal places as needed
