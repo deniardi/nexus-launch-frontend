@@ -59,7 +59,7 @@ export function useMarketCap(tokenAddress: `0x${string}` | null) {
   const { data, refetch } = useReadContract({
     address: bondingCurveAddress,
     abi: BondingCurveManagerABI,
-    functionName: 'getMarketCap',
+    functionName: 'calculateMarketCap',
     args: tokenAddress ? [tokenAddress] : undefined,
     query: {
       enabled: !!tokenAddress,
@@ -143,21 +143,37 @@ export const useTokenLiquidity = (tokenAddress: `0x${string}` | null) => {
 };
 
 export function useCalcBuyReturn(tokenAddress: `0x${string}`, ethAmount: bigint) {
+  // First get current supply, then calculate buy cost
+  const { data: currentSupply } = useReadContract({
+    address: tokenAddress,
+    abi: ERC20ABI,
+    functionName: 'totalSupply',
+  });
+
   const { data, isLoading } = useReadContract({
     address: getBondingCurveAddress(tokenAddress),
     abi: BondingCurveManagerABI,
-    functionName: 'calculateCurvedBuyReturn',
-    args: [tokenAddress, ethAmount],
+    functionName: 'calculateBuyCost',
+    args: currentSupply !== undefined ? [currentSupply, ethAmount] : undefined,
+    query: { enabled: currentSupply !== undefined },
   });
   return { data: data as bigint | undefined, isLoading };
 }
 
 export function useCalcSellReturn(tokenAddress: `0x${string}`, tokenAmount: bigint) {
+  // First get current supply, then calculate sell refund
+  const { data: currentSupply } = useReadContract({
+    address: tokenAddress,
+    abi: ERC20ABI,
+    functionName: 'totalSupply',
+  });
+
   const { data, isLoading } = useReadContract({
     address: getBondingCurveAddress(tokenAddress),
     abi: BondingCurveManagerABI,
-    functionName: 'calculateCurvedSellReturn',
-    args: [tokenAddress, tokenAmount],
+    functionName: 'calculateSellRefund',
+    args: currentSupply !== undefined ? [currentSupply, tokenAmount] : undefined,
+    query: { enabled: currentSupply !== undefined },
   });
   return { data: data as bigint | undefined, isLoading };
 }
@@ -323,7 +339,7 @@ export function useBuyTokens(tokenAddress?: string) {
         address: getBondingCurveAddress(tokenAddress),
         abi: BondingCurveManagerABI,
         functionName: 'buy',
-        args: [tokenAddress],
+        args: [tokenAddress, ethAmount],
         value: ethAmount,
       });
       return result;
