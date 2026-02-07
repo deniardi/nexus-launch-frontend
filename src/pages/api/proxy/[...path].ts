@@ -29,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       data: req.body,
       headers: {
         ...req.headers,
-        host: new URL(process.env.API_BASE_URL).host,
+        host: new URL(apiUrl).host,
       },
     });
 
