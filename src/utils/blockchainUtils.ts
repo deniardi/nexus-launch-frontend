@@ -39,7 +39,7 @@ export function useCurrentTokenPrice(tokenAddress: `0x${string}`) {
   const { data, refetch } = useReadContract({
     address: getBondingCurveAddress(tokenAddress),
     abi: BondingCurveManagerABI,
-    functionName: 'getCurrentTokenPrice',
+    functionName: 'getCurrentPrice',
     args: [tokenAddress],
   });
   return { data: data as bigint | undefined, refetch };
@@ -95,16 +95,16 @@ const OLD_TOKENS_ABI = [{
 
 // Update the type definition to be more specific
 type OldTokenLiquidityResponse = [string, boolean, bigint];
-type NewTokenLiquidityResponse = [string, bigint, bigint, boolean];
+type NewTokenLiquidityResponse = [string, string, bigint, bigint, boolean, boolean];
 type TransformedLiquidityData = [string, bigint, bigint, boolean] | undefined;
 
 export const useTokenLiquidity = (tokenAddress: `0x${string}` | null) => {
-  const isOldContract = tokenAddress ? oldTokenAddresses.some(addr => 
+  const isOldContract = tokenAddress ? oldTokenAddresses.some(addr =>
     addr.toLowerCase() === tokenAddress.toLowerCase()
   ) : false;
 
   const bondingCurveAddress = getBondingCurveAddress(tokenAddress);
-  
+
   const { data, isError, isLoading, refetch } = useContractRead({
     address: bondingCurveAddress,
     abi: isOldContract ? OLD_TOKENS_ABI : BondingCurveManagerABI,
@@ -126,9 +126,10 @@ export const useTokenLiquidity = (tokenAddress: `0x${string}` | null) => {
         return [token, BigInt(0), ethBalance, isListed];
       }
 
-      // New contract format: [token, tokenBalance, ethBalance, isListed]
-      const [token, tokenBalance, ethBalance, isListed] = data as NewTokenLiquidityResponse;
-      return [token, tokenBalance, ethBalance, isListed];
+      // New contract format from ABI: [tokenAddress, creator, initialSupply, raisedAmount, graduated, liquidityAdded]
+      const [tokenAddress, creator, initialSupply, raisedAmount, graduated, liquidityAdded] = data as NewTokenLiquidityResponse;
+      // Transform to expected format: [token, tokenBalance(0), ethBalance(raisedAmount), isListed(graduated||liquidityAdded)]
+      return [tokenAddress, BigInt(0), raisedAmount, graduated || liquidityAdded];
     } catch (error) {
       return undefined;
     }
@@ -306,7 +307,7 @@ export function useCreateToken() {
           abi: BondingCurveManagerABI,
           data: tokenCreatedLog.data,
           topics: tokenCreatedLog.topics,
-        }) as unknown as { eventName: string; args: { token: `0x${string}`; buyer: `0x${string}`; amount: bigint; cost: bigint } };
+        }) as unknown as { eventName: string; args: { token: `0x${string}`; creator: `0x${string}`; name: string; symbol: string; initialSupply: bigint; creationFee: bigint } };
 
         if (decodedLog.eventName === 'TokenCreated' && decodedLog.args) {
           console.log('Token created successfully. Address:', decodedLog.args.token);
