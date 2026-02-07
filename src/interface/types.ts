@@ -35,12 +35,13 @@ export interface LiquidityEvent {
   }
   
   export interface PaginatedResponse<T> {
-    [x: string]: any;//wad added
-    tokens: never[];
+    [x: string]: any;
+    tokens?: T[];
     data: T[];
     totalCount: number;
     currentPage: number;
     totalPages: number;
+    fullList?: boolean;
   }
 
   export interface TokenWithTransactions extends Token {

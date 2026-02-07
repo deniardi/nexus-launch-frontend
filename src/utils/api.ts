@@ -284,12 +284,12 @@ export async function getTokenHolders(tokenAddress: string): Promise<TokenHolder
     const response = await axios.get(`https://nexus.testnet.blockscout.com/api/v2/tokens/${tokenAddress}/holders`);
     const data = response.data;
 
-    return data.items.map((item: any) => {
+    return data.items?.map((item: any) => {
       return {
-        address: item.address.hash,
+        address: item.address?.hash || item.address,
         balance: item.value
       };
-    });
+    }) ?? [];
   } catch (error) {
     console.error('Error fetching token holders:', error);
     throw new Error('Failed to fetch token holders');

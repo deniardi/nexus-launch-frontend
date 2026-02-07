@@ -297,20 +297,20 @@ const TokenInfo: React.FC<TokenInfoProps> = ({ tokenInfo, showHeader = false, re
           <div className="flex justify-between text-sm mb-2">
             <span className="text-gray-400">Progress to DEX</span>
             <span className={isCompleted ? "text-[var(--primary)]" : "text-white"}>
-              {isCompleted 
-                ? 'Completed' 
-                : liquidityData && liquidityData[2] 
-                  ? `${calculateProgress(liquidityData[2]).toFixed(4)}%` 
+              {isCompleted
+                ? 'Completed'
+                : liquidityData && liquidityData[2]
+                  ? `${calculateProgress(liquidityData[2]).toFixed(4)}%`
                   : '0%'}
             </span>
           </div>
           <div className="w-full bg-[var(--card-boarder)] rounded-full h-2.5">
             <div
               className="bg-[var(--primary)] h-2.5 rounded-full transition-all duration-500"
-              style={{ 
-                width: isCompleted 
-                  ? '100%' 
-                  : `${liquidityData ? calculateProgress(liquidityData[2]) : 0}%` 
+              style={{
+                width: isCompleted
+                  ? '100%'
+                  : `${liquidityData ? calculateProgress(liquidityData[2]) : 0}%`
               }}
             />
           </div>
