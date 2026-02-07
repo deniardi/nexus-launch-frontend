@@ -336,11 +336,16 @@ export function useBuyTokens(tokenAddress?: string) {
 
   const buyTokens = async (tokenAddress: `0x${string}`, ethAmount: bigint) => {
     try {
+      // For bonding curve: buy(tokenAddress, amount) where amount = tokens to buy
+      // To buy max with sent ETH, we pass a very large amount
+      // Contract will calculate actual tokens based on msg.value (ETH sent)
+      const maxUint256 = BigInt(2) ** BigInt(256) - BigInt(1);
+
       const result = await writeContractAsync({
         address: getBondingCurveAddress(tokenAddress),
         abi: BondingCurveManagerABI,
         functionName: 'buy',
-        args: [tokenAddress, ethAmount],
+        args: [tokenAddress, maxUint256],
         value: ethAmount,
       });
       return result;

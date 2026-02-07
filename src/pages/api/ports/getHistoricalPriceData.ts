@@ -1,12 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import axios from 'axios';
-import { Token } from '@/interface/types';
+import { HistoricalPrice } from '@/interface/types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Token>
+  res: NextApiResponse<HistoricalPrice[]>
 ) {
   if (req.method !== 'GET') {
     return res.status(405).end();
