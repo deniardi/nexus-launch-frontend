@@ -13,7 +13,7 @@ import { WebSocketProvider } from '@/components/providers/WebSocketProvider';
 
 const config = getDefaultConfig({
   appName: "Nexus Launch",
-  projectId: "YOUR_PROJECT_ID",
+  projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || "8cf3897a-7ecf-4b46-8b3f-fe5f59e7c0e6",
   chains: supportedChains as any,
   ssr: true,
 });

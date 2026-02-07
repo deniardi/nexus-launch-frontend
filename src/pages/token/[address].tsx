@@ -176,13 +176,13 @@ const TokenDetail: React.FC<TokenDetailProps> = ({ initialTokenInfo }) => {
 
       
       try {
-        const events = await getTokenLiquidityEvents(tokenInfo.id);
+        const events = await getTokenLiquidityEvents(tokenInfo.address);
         setLiquidityEvents(events);
       } catch (error) {
         console.error('Error fetching liquidity events:', error);
       }
     }
-  }, [address, transactionPage, fetchTokenData, fetchHistoricalPriceData, refetchCurrentPrice, refetchLiquidity, tokenInfo.id, refetchUserBalance]);
+  }, [address, transactionPage, fetchTokenData, fetchHistoricalPriceData, refetchCurrentPrice, refetchLiquidity, tokenInfo.address, refetchUserBalance]);
 
   useEffect(() => {
     fetchAllData();
