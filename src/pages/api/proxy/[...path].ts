@@ -2,8 +2,10 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import axios from 'axios';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (!process.env.API_BASE_URL) {
-    console.error('API_BASE_URL is not configured');
+  const apiUrl = process.env.API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL;
+
+  if (!apiUrl) {
+    console.error('API_BASE_URL or NEXT_PUBLIC_API_BASE_URL is not configured');
     return res.status(500).json({ error: 'API_BASE_URL is not configured' });
   }
 
@@ -15,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   const apiPath = Array.isArray(path) ? path.join('/') : path;
-  const url = `${process.env.API_BASE_URL}/api/${apiPath}`;
+  const url = `${apiUrl}/api/${apiPath}`;
   
   try {
     console.log(`Proxying ${req.method} request to:`, url);

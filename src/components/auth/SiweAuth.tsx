@@ -25,7 +25,7 @@ const SiweAuth: React.FC<SiweAuthProps> = ({ onAuthSuccess }) => {
         statement: 'Sign in to post a message',
         uri: window.location.origin,
         version: '1',
-        chainId: 1,
+        chainId: 3945, // Nexus Testnet chain ID
         nonce: nonce
       });
       const messageToSign = message.prepareMessage();

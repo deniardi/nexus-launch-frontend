@@ -20,24 +20,24 @@ export async function getAllTokens(page: number = 1, pageSize: number = 13): Pro
 }
 
 export async function getAllTokensTrends(): Promise<Token[]> {
-  const response = await axios.get('/api/ports/getAllTokensTrends');
+  const response = await api.get('/api/ports/getAllTokensTrends');
   return response.data;
 }
 
 export async function getAllTokensWithoutLiquidity(): Promise<Token[]> { //chewyswap aggregator use
-  const response = await axios.get('/api/ports/getAllTokensWithoutLiquidity');
+  const response = await api.get('/api/ports/getAllTokensWithoutLiquidity');
   return response.data;
 }
 
 //GET /api/volume/total
 export async function getTotalVolume(): Promise<{ totalVolume: number }> {
-  const response = await axios.get('/api/ports/getTotalVolume');
+  const response = await api.get('/api/ports/getTotalVolume');
   return response.data;
 }
 
 //GET /api/volume/range?hours=24
 export async function getVolumeRange(hours: number): Promise<{ totalVolume: number }> {
-  const response = await axios.get('/api/ports/getVolumeRange', {
+  const response = await api.get('/api/ports/getVolumeRange', {
     params: { hours }
   });
   return response.data;
@@ -52,7 +52,7 @@ export async function getTotalTokenCount(): Promise<{ totalTokens: number }> {
 
 export async function getRecentTokens(page: number = 1, pageSize: number = 20, hours: number = 24): Promise<PaginatedResponse<Token> | null> {
   try {
-    const response = await axios.get('/api/ports/getRecentTokens', {
+    const response = await api.get('/api/ports/getRecentTokens', {
       params: { page, pageSize, hours }
     });
     return response.data;
@@ -71,7 +71,7 @@ export async function searchTokens(
   pageSize: number = 20
 ): Promise<PaginatedResponse<Token>> {
   try {
-    const response = await axios.get('/api/ports/searchTokens', {
+    const response = await api.get('/api/ports/searchTokens', {
       params: { q: query, page, pageSize }
     });
     return response.data;
@@ -82,7 +82,7 @@ export async function searchTokens(
 }
 
 export async function getTokensWithLiquidity(page: number = 1, pageSize: number = 20): Promise<PaginatedResponse<TokenWithLiquidityEvents>> {
-  const response = await axios.get('/api/ports/getTokensWithLiquidity', {
+  const response = await api.get('/api/ports/getTokensWithLiquidity', {
     params: { page, pageSize }
   });
   return response.data;
@@ -94,7 +94,7 @@ export async function getTokenByAddress(address: string): Promise<Token> {
 }
 
 export async function getTokenLiquidityEvents(tokenId: string, page: number = 1, pageSize: number = 20): Promise<PaginatedResponse<LiquidityEvent>> {
-  const response = await axios.get('/api/ports/getTokenLiquidityEvents', {
+  const response = await api.get('/api/ports/getTokenLiquidityEvents', {
     params: { tokenId, page, pageSize }
   });
   return response.data;
@@ -106,13 +106,13 @@ export async function getTokenInfoAndTransactions(
   transactionPageSize: number = 10
 ): Promise<TokenWithTransactions> {
   try {
-    const baseUrl = typeof window === 'undefined' 
+    const baseUrl = typeof window === 'undefined'
       ? process.env.NEXT_VERCEL_URL
         ? `https://${process.env.NEXT_VERCEL_URL}`
         : 'http://localhost:3000'
       : '';
 
-    const response = await axios.get(`${baseUrl}/api/ports/getTokenInfoAndTransactions`, {
+    const response = await api.get(`${baseUrl}/api/ports/getTokenInfoAndTransactions`, {
       params: { address, transactionPage, transactionPageSize }
     });
     return response.data;
@@ -125,7 +125,7 @@ export async function getTokenInfoAndTransactions(
 
 //historical price
 export async function getHistoricalPriceData(address: string): Promise<Token> {
-  const response = await axios.get('/api/ports/getHistoricalPriceData', {
+  const response = await api.get('/api/ports/getHistoricalPriceData', {
     params: { address }
   });
   return response.data;
@@ -134,7 +134,7 @@ export async function getHistoricalPriceData(address: string): Promise<Token> {
 //eth price usd
 export async function getCurrentPrice(): Promise<string> {
   try {
-    const response = await axios.get<PriceResponse>('/api/ports/getCurrentPrice');
+    const response = await api.get<PriceResponse>('/api/ports/getCurrentPrice');
     return response.data.price;
   } catch (error) {
     console.error('Error fetching current price:', error);
@@ -168,7 +168,7 @@ export async function getTokenUSDPriceHistory(address: string): Promise<USDHisto
 
 
 export async function updateToken(
-  address: string, 
+  address: string,
   data: {
     logo?: string;
     description?: string;
@@ -180,7 +180,7 @@ export async function updateToken(
   }
 ): Promise<Token> {
   try {
-    const response = await axios.patch('/api/ports/updateToken', {
+    const response = await api.patch('/api/ports/updateToken', {
       address,
       data
     });
@@ -193,12 +193,12 @@ export async function updateToken(
 
 // get all transaction associated with a particular address
 export async function getTransactionsByAddress(
-  address: string, 
-  page: number = 1, 
+  address: string,
+  page: number = 1,
   pageSize: number = 10
 ): Promise<TransactionResponse> {
   try {
-    const response = await axios.get('/api/ports/getTransactionsByAddress', {
+    const response = await api.get('/api/ports/getTransactionsByAddress', {
       params: { address, page, pageSize }
     });
     return response.data;
@@ -210,13 +210,13 @@ export async function getTransactionsByAddress(
 
 // POST /chats: Add a new chat message with optional reply_to
 export async function addChatMessage(
-  user: string, 
-  token: string, 
-  message: string, 
+  user: string,
+  token: string,
+  message: string,
   replyTo?: number
 ): Promise<{ id: number }> {
   try {
-    const response = await axios.post('/api/ports/addChatMessage', {
+    const response = await api.post('/api/ports/addChatMessage', {
       user,
       token,
       message,
@@ -239,7 +239,7 @@ export async function getChatMessages(token: string): Promise<Array<{
   timestamp: string;
 }>> {
   try {
-    const response = await axios.get('/api/ports/getChatMessages', {
+    const response = await api.get('/api/ports/getChatMessages', {
       params: { token }
     });
     return response.data;
@@ -252,7 +252,7 @@ export async function getChatMessages(token: string): Promise<Array<{
 //get all token address
 export async function getAllTokenAddresses(): Promise<Array<{address: string, symbol: string}>> {
   try {
-    const response = await axios.get('/api/ports/getAllTokenAddresses');
+    const response = await api.get('/api/ports/getAllTokenAddresses');
     return response.data;
   } catch (error) {
     console.error('Error fetching token addresses and symbols:', error);
@@ -266,7 +266,7 @@ export async function getTokensByCreator(
   pageSize: number = 20
 ): Promise<PaginatedResponse<Token>> {
   try {
-    const response = await axios.get('/api/ports/getTokensByCreator', {
+    const response = await api.get('/api/ports/getTokensByCreator', {
       params: { creatorAddress, page, pageSize }
     });
     // console.log('getTokensByCreator', response.data);
